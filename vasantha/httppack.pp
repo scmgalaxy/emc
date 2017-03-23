@@ -1,14 +1,35 @@
+$http_conf = '<h1 style="color:red">hello to the world of puppet </h1>'
+if $facts['os']['family'] == 'RedHat'{
+
+
+file {'/var/www/html/':
+ensure => 'directory',
+}
+
 package {'httpd':
 ensure => 'installed', #'absent', 'purged', 'latest','4.1'
-provider => 'yum'
+provider => 'yum',
+require => File['/var/www/html/']
 }
+
 
 service{'httpd':
 ensure => 'running',
 enable => true,
+require => Package['httpd']
 }
 
-$http_conf = '<h1 style="color:red">hello to the world of puppet </h1>'
-file {'/var/www/html/index2.html':
+
+file {'/var/www/html/index.html':
 ensure => 'file',
-content => $http_conf,}
+content => $http_conf,
+require => Package['httpd']
+}
+}
+
+else
+{
+  notify {"enjoy!":}
+
+}
+
