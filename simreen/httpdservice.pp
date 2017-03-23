@@ -1,0 +1,3 @@
+service {'httpd':
+  ensure => 'running',
+}
